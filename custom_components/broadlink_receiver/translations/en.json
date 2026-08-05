@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Add IR receiver to a Broadlink device",
+        "description": "Pick one of your existing Broadlink devices to expose its IR learning mode as a native infrared receiver entity.",
+        "data": {
+          "broadlink_entry": "Broadlink device"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Could not connect to the device. Check that it's powered on and reachable on the network.",
+      "unknown_device": "Selected device could not be found.",
+      "missing_device_info": "Could not read host/MAC/type from the selected device's configuration."
+    },
+    "abort": {
+      "no_broadlink_devices": "No Broadlink devices are configured yet. Set up the core Broadlink integration first, then add an IR receiver for it here.",
+      "all_devices_configured": "All of your configured Broadlink devices already have an IR receiver entity.",
+      "already_configured": "This device already has an IR receiver entity."
+    }
+  }
+}
