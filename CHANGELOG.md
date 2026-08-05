@@ -2,6 +2,15 @@
 
 All notable changes to this project are documented here.
 
+## [0.1.2] - 2026-08-05
+
+### Fixed
+- The brand icon never showed up in HACS or the HA integrations page because
+  the `v0.1.1` release was cut before `custom_components/broadlink_receiver/brand/`
+  was added to the repo — anyone installing via HACS got a tree with no icon
+  assets in it at all, regardless of the fix landing on `main`. This release
+  is the first to actually include `brand/icon.png` and `brand/logo.png`.
+
 ## [0.1.1] - 2026-08-04
 
 ### Fixed
