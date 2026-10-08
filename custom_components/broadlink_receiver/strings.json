@@ -12,12 +12,14 @@
     "error": {
       "cannot_connect": "Could not connect to the device. Check that it's powered on and reachable on the network.",
       "unknown_device": "Selected device could not be found.",
-      "missing_device_info": "Could not read host/MAC/type from the selected device's configuration."
+      "missing_device_info": "Could not read host/MAC/type from the selected device's configuration.",
+      "unsupported_device": "The selected device does not support IR learning or has invalid device information."
     },
     "abort": {
       "no_broadlink_devices": "No Broadlink devices are configured yet. Set up the core Broadlink integration first, then add an IR receiver for it here.",
       "all_devices_configured": "All of your configured Broadlink devices already have an IR receiver entity.",
-      "already_configured": "This device already has an IR receiver entity."
+      "already_configured": "This device already has an IR receiver entity.",
+      "unsupported_library": "Home Assistant 2026.10 or later with Core's async python-broadlink library is required. Remove the conflicting broadlink package and restore Core's requirements, then restart Home Assistant."
     }
   }
 }

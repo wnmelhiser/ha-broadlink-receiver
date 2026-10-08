@@ -2,6 +2,22 @@
 
 All notable changes to this project are documented here.
 
+## [Unreleased]
+
+### Fixed
+- Use the Broadlink library pinned by Home Assistant Core through the
+  existing integration dependency, instead of installing the conflicting
+  `broadlink==0.19.0` distribution.
+- Await authentication, learning and polling with Core's async API.
+  Cancel capture tasks and close connections on removal, shutdown, failed
+  setup and after config-flow probes.
+- Normalize Core's stored MAC addresses before creating separate receiver
+  connections, and reject devices without IR learning support.
+
+### Changed
+- Require Home Assistant 2026.10 or later, the first release using
+  `python-broadlink`'s asynchronous API.
+
 ## [0.1.2] - 2026-08-05
 
 ### Fixed

@@ -5,8 +5,8 @@
 [![GitHub release](https://img.shields.io/github/v/release/wnmelhiser/ha-broadlink-receiver)](https://github.com/wnmelhiser/ha-broadlink-receiver/releases)
 
 Custom Home Assistant integration that exposes a Broadlink RM device's IR
-learning capability as a native **`InfraredReceiverEntity`** (HA 2026.6+
-`infrared` platform).
+learning capability as a native **`InfraredReceiverEntity`** (requires HA
+2026.10+).
 
 ## Why this exists
 
@@ -26,9 +26,9 @@ This integration is that bridge.
 ## How it works
 
 Broadlink's protocol has no push/streaming mode for captured IR signals.
-Capturing one is a two-step, blocking process — `enter_learning()` arms the
+Capturing one is a two-step, asynchronous process — `await enter_learning()` arms the
 device, then `check_data()` is polled until a signal shows up. This
-integration runs that loop on a background thread, re-arming learning mode
+integration awaits both operations in a cancellable background task, re-arming learning mode
 every ~15 seconds so it behaves like a continuous sniffer instead of a
 single learn-one-code operation, and forwards every captured signal to HA's
 native receiver entity API as soon as it lands.
@@ -38,9 +38,17 @@ the core `broadlink` integration's connection. It doesn't touch your
 existing config entry, `remote.send_command`, or `remote.learn_command` —
 those keep working exactly as before.
 
+The manifest depends on Core's `broadlink` integration and deliberately has
+no library requirement of its own. Home Assistant installs the version
+pinned by Core (`python-broadlink==1.0.6` in HA 2026.10, imported as
+`broadlink`). This integration never installs or pins the conflicting PyPI
+distribution `broadlink`. The polling task is cancelled and its UDP endpoint
+closed when the entity is removed, the integration is unloaded, or HA stops.
+
 ## Requirements
 
-- Home Assistant **2026.6** or later (for `InfraredReceiverEntity`)
+- Home Assistant **2026.10** or later (for Core's async Broadlink library;
+  the native `InfraredReceiverEntity` API itself was added in 2026.6)
 - The core **Broadlink** integration already set up with your RM device
 - A Broadlink device with IR receive hardware (RM mini/RM mini 3/RM pro/RM4
   series — i.e. anything that already supports `remote.learn_command`
@@ -96,7 +104,7 @@ seconds, and a `captured signal with N timings` line each time you press a
 remote button in range. If you see the arm messages but never a capture
 message when pressing a button, the device likely isn't receiving the
 `enter_learning()` call (check host/IP and that nothing else has the device
-in a conflicting state) — if you see neither, the background thread isn't
+in a conflicting state) — if you see neither, the background task isn't
 running; check the Home Assistant log around integration startup for a
 traceback.
 
@@ -106,6 +114,24 @@ appearing, check the Home Assistant log for a `RuntimeError` mentioning
 real bug in 0.1.0, fixed in 0.1.1 by using `hass.loop.call_soon_threadsafe`
 instead of `hass.add_job`. If you see it on a version at or after 0.1.1,
 please open an issue.
+
+### Upgrading from the conflicting library
+
+Earlier versions installed `broadlink==0.19.0`, which writes to the same
+`broadlink` module directory as `python-broadlink`. Updating this integration
+removes that requirement but does not automatically uninstall the old
+distribution or repair files it overwrote. Restart Home Assistant after
+updating. If the log still reports an unsupported library or missing
+Broadlink imports, repair the Python environment used by HA: remove the
+old `broadlink` distribution and reinstall **the `python-broadlink` version
+pinned by your installed Core release**, then restart HA again. Removing
+only the old package can also remove shared module files, so reinstalling
+Core's package afterward is essential.
+
+For HA OS or Container, use your installation's supported update/rebuild
+procedure to restore a clean managed environment rather than installing
+Python packages in an unrelated shell environment. Do not add a replacement
+library pin to this custom integration's manifest.
 
 ## Known limitations
 
@@ -120,8 +146,9 @@ please open an issue.
 - **One receiver connection per device.** Adding the integration twice for
   the same physical Broadlink device isn't supported (the config flow won't
   offer a device that's already configured).
-- Tested against `python-broadlink` 0.19.0's `rmmini`/`rm4mini`/`rm4pro`
-  classes. Very old firmware revisions with nonstandard `check_data`
+- Uses Core's async `python-broadlink` API (`rmmini` and its subclasses,
+  including `rm4mini`/`rm4pro`). Devices without IR learning support cannot
+  be added. Very old firmware revisions with nonstandard `check_data`
   behavior haven't been tested — please open an issue with your device's
   reported type if something doesn't work.
 
