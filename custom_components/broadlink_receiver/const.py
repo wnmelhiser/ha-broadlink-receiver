@@ -1,4 +1,5 @@
 """Constants for the Broadlink IR Receiver integration."""
+
 from __future__ import annotations
 
 DOMAIN = "broadlink_receiver"
