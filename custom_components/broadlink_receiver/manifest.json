@@ -7,5 +7,5 @@
   "documentation": "https://github.com/wnmelhiser/ha-broadlink-receiver",
   "iot_class": "local_polling",
   "issue_tracker": "https://github.com/wnmelhiser/ha-broadlink-receiver/issues",
-  "version": "0.1.2"
+  "version": "0.2.0"
 }
