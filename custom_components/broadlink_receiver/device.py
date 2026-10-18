@@ -4,12 +4,35 @@ from collections.abc import Mapping
 from inspect import iscoroutinefunction
 from typing import Any
 
-import broadlink as blk
-from broadlink.remote import rmmini
 from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT
 from homeassistant.exceptions import ConfigEntryError
 
 from .const import CONF_DEV_TYPE
+
+# Core 2026.10.2 switched from python-broadlink (imported as `broadlink`) to
+# broadlink-async (imported as `broadlink_async`); both share the same API.
+try:
+    import broadlink_async as blk
+    from broadlink_async.exceptions import (
+        BroadlinkException,
+        ReadError,
+        StorageError,
+    )
+    from broadlink_async.remote import data_to_pulses, rmmini
+except ImportError:
+    import broadlink as blk
+    from broadlink.exceptions import BroadlinkException, ReadError, StorageError
+    from broadlink.remote import data_to_pulses, rmmini
+
+__all__ = [
+    "BroadlinkException",
+    "ReadError",
+    "StorageError",
+    "check_library",
+    "create_device",
+    "data_to_pulses",
+    "rmmini",
+]
 
 
 def check_library() -> None:
@@ -19,7 +42,7 @@ def check_library() -> None:
     ):
         raise ConfigEntryError(
             "Broadlink IR Receiver requires Home Assistant 2026.10 or later "
-            "and Core's async python-broadlink library. Remove the conflicting "
+            "and Core's async Broadlink library. Remove the conflicting "
             "broadlink distribution and restore Core's requirements, then "
             "restart Home Assistant."
         )

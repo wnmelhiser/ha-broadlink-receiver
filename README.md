@@ -40,8 +40,9 @@ those keep working exactly as before.
 
 The manifest depends on Core's `broadlink` integration and deliberately has
 no library requirement of its own. Home Assistant installs the version
-pinned by Core (`python-broadlink==1.0.6` in HA 2026.10, imported as
-`broadlink`). This integration never installs or pins the conflicting PyPI
+pinned by Core: `python-broadlink==1.0.6` (imported as `broadlink`) in HA
+2026.10.0–2026.10.1, and `broadlink-async` (imported as `broadlink_async`)
+from HA 2026.10.2. The integration imports whichever one is present. This integration never installs or pins the conflicting PyPI
 distribution `broadlink`. The polling task is cancelled and its UDP endpoint
 closed when the entity is removed, the integration is unloaded, or HA stops.
 

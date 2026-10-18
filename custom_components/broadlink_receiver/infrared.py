@@ -11,8 +11,6 @@ import asyncio
 import logging
 from contextlib import suppress
 
-from broadlink.exceptions import BroadlinkException, ReadError, StorageError
-from broadlink.remote import data_to_pulses, rmmini
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import EVENT_HOMEASSISTANT_STOP
 from homeassistant.core import Event, HomeAssistant
@@ -31,6 +29,13 @@ except ImportError as err:  # pragma: no cover - guards against HA < 2026.6
     ) from err
 
 from .const import DOMAIN, LEARNING_REARM_INTERVAL, MANUFACTURER, POLL_INTERVAL
+from .device import (
+    BroadlinkException,
+    ReadError,
+    StorageError,
+    data_to_pulses,
+    rmmini,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
