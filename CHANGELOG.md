@@ -2,6 +2,14 @@
 
 All notable changes to this project are documented here.
 
+## [Unreleased]
+
+### Fixed
+- Fix `No module named 'broadlink'` on Home Assistant 2026.10.2 and later,
+  where Core replaced `python-broadlink` with `broadlink-async` (imported as
+  `broadlink_async`). The library is now imported from `broadlink_async`,
+  falling back to `broadlink` on 2026.10.0–2026.10.1.
+
 ## [0.2.0] - 2026-10-09
 
 ### Fixed

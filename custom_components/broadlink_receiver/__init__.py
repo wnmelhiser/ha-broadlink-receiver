@@ -16,14 +16,13 @@ working exactly as before.
 
 from __future__ import annotations
 
-from broadlink.exceptions import BroadlinkException
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_HOST, Platform
 from homeassistant.core import HomeAssistant
 from homeassistant.exceptions import ConfigEntryNotReady
 
 from .const import DOMAIN
-from .device import create_device
+from .device import BroadlinkException, create_device
 
 PLATFORMS: list[Platform] = [Platform.INFRARED]
 

@@ -6,7 +6,6 @@ import logging
 from typing import Any
 
 import voluptuous as vol
-from broadlink.exceptions import BroadlinkException
 from homeassistant import config_entries
 from homeassistant.const import CONF_HOST, CONF_MAC, CONF_PORT, CONF_TYPE
 from homeassistant.data_entry_flow import FlowResult
@@ -18,7 +17,7 @@ from homeassistant.helpers.selector import (
 )
 
 from .const import CONF_DEV_TYPE, DOMAIN
-from .device import check_library, create_device
+from .device import BroadlinkException, check_library, create_device
 
 _LOGGER = logging.getLogger(__name__)
 
