@@ -2,7 +2,7 @@
 
 All notable changes to this project are documented here.
 
-## [Unreleased]
+## [0.2.1] - 2026-10-17
 
 ### Fixed
 - Fix `No module named 'broadlink'` on Home Assistant 2026.10.2 and later,
